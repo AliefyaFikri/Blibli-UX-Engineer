@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+         * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         }
+         header, footer, section, article {
+         display: block;
+         }
+         header, footer {
+         padding: 0;
+         margin: 0;
+         }
+         .header {
+         padding: 10px;
+         margin: 0;
+         display: flex;
+         align-items: center;
+         }
+         .footer {
+         padding: 30px;
+         margin: 0;
+         text-align: center;
+         font-weight: bold;
+         }
+         .container {
+         display: flex;
+         flex-wrap: nowrap;
+         justify-content: center;
+         flex-direction: column;
+         gap: 10px;
+         padding: 10px;
+         }
+         .product-cards {
+         display: flex;
+         flex-wrap: nowrap;
+         justify-content: left;
+         flex-direction: row;
+         gap: 10px;
+         padding: 10px;
+         overflow: hidden;
+         }
+         .block {
+         flex: 1 0 auto;
+         min-height: 200px;
+         background-color: #f0f0f0;
+         display: flex;
+         margin: 5px;
+         justify-content: center;
+         align-items: center;
+         text-align: center;
+         font-size: 50px;
+         font-weight: bold;
+         }
+         .block-group {
+         display: flex;
+         gap: 10px;
+         }
+         .product-card {
+         width: 132px; /* Mobile width */
+         border: 1px solid #ccc;
+         box-sizing: border-box;
+         border-radius: 20px;
+         box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
+         overflow: hidden;
+         }
+         .product-card img {
+         width: 100%;
+         height: auto;
+         background-color: #f7f7f7;
+         border-top-left-radius: 20px;
+         border-top-right-radius: 20px;
+         }
+         .product-title {
+         font-size: 14px;
+         line-height: 1.2em;
+         height: 2.4em; /* Adjusted for two lines */
+         overflow: hidden;
+         text-overflow: ellipsis;
+         display: -webkit-box;
+         -webkit-line-clamp: 2;
+         -webkit-box-orient: vertical;
+         font-weight: bold;
+         margin-bottom: 5px;
+         padding-right: 10px;
+         padding-left: 10px;
+         }
+         .product-price {
+         color: #f37123;
+         font-weight: bold;
+         margin-bottom: 0; /* Remove bottom margin if necessary */
+         margin-top: 0;
+         padding-right: 10px;
+         padding-left: 10px;
+         }
+         .discounted-price {
+         color: #999;
+         font-size: 13px;
+         display: block; /* Make it a block element to reduce space */
+         margin-top: 4px; /* Adjust the top margin as needed */
+         padding-right: 10px;
+         padding-left: 10px;
+         }
+         .discounted-percent {
+         color: red;
+         border-radius: 10px;
+         background-color: #f9b9bc;
+         padding: 2px 4px; /* Adjust padding as needed */
+         margin-left: 4px; /* Adjust left margin as needed */
+         }
+         .add-to-bag {
+         background-color: #0095da;
+         color: white;
+         padding: 10px;
+         text-align: center;
+         display: block;
+         text-decoration: none;
+         margin-top: 10px;
+         border-radius: 10px;
+         margin: 10px;
+         }
+         .scroll-button {
+         position: absolute;
+         width: 30px;
+         height: 30px;
+         border-radius: 50%;
+         margin-top: 100px;
+         background-color: #fff;
+         border: none;
+         cursor: pointer;
+         color: #0095da;
+         font-weight: bold;
+         box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+         }
+         #scroll-left {
+         position: absolute;
+         left: 15px;
+         z-index: 1000;
+         }
+         #scroll-right {
+         position: absolute;
+         right: 15px;
+         }
+         #scroll-top {
+         position: fixed;
+         bottom: 20px;
+         right: 20px;
+         width: 50px;
+         height: 50px;
+         border-radius: 50%;
+         background-color: #0095da;
+         color: #fff;
+         border: none;
+         cursor: pointer;
+         align-items: center;
+         justify-content: center;
+         font-size: 24px;
+         }
+         #toggleFooterContent {
+         color: #0095da;
+         font-weight: bold;
+         border: none;
+         cursor: pointer;
+         }
+         .arrow {
+         display: inline-block;
+         margin-left: 5px;
+         transition: transform 0.5s ease-in-out;
+         }
+         #toggleFooterContent:active .arrow {
+         transform: rotate(90deg);
+         }
+         @media screen and (min-width: 600px) {
+         .product-card {
+         min-width: 182px; /* Desktop width */
+         }
+         }
+         @media screen and (max-width: 600px) {
+         .header {
+         justify-content: center;
+         }
+         .product-card {
+         min-width: 132px; /* Desktop width */
+         }
+         .block-container {
+         display: flex;
+         flex-direction: column;
+         }
+         .block-group {
+         display: flex;
+         flex-direction: row;
+         }
+         .product-cards {
+         flex-direction: row;
+         }
+         .block-group .block:nth-of-type(1), .block-group .block:nth-of-type(2) {
+         display: none;
+         }
+         #block3 {
+         order: 2;
+         }
+         #block4 {
+         order: 1;
+         }
+         .mobile-blocks {
+         display: flex;
+         flex-direction: row; /* Set the direction to row to align items side by side */
+         justify-content: center; /* Center the items horizontally */
+         gap: 10px; /* Optional: add space between the blocks */
+         }
+         .mobile-block {
+         flex: 1; /* Adjust this value as needed to set the flex-grow property */
+         min-height: 200px;
+         background-color: #f0f0f0;
+         display: flex;
+         margin: 5px;
+         justify-content: center;
+         align-items: center;
+         text-align: center;
+         font-size: 50px;
+         font-weight: bold;
+         }
+         }
+         @media screen and (min-width: 601px) {
+         .mobile-blocks {
+         display: none;
+         }
+         }
+      </style>
+   </head>
+   <body>
+      <header class="header" style="background-color: #0095da;">
+         <img src="blibli.png" alt="Logo" style="height: 50px;">
+      </header>
+      <section class="container">
+         <div class="block-container">
+            <div class="block-group">
+               <article class="block" style="background-color: #ff0;">1</article>
+               <article class="block" style="background-color: #0ff;">2</article>
+            </div>
+            <article class="block" id="block3" style="background-color: #f0f;">3</article>
+            <article class="block" id="block4" style="background-color: #f88;">4</article>
+         </div>
+         <div class="product-cards">
+            <button class="scroll-button" id="scroll-left"><</button>
+            <div class="product-card">
+               <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+               <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+               <p class="product-price">Rp3.550.000</p>
+               <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+               <a href="#" class="add-to-bag">Add to bag</a>
+            </div>
+            <div class="product-card">
+               <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+               <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+               <p class="product-price">Rp3.550.000</p>
+               <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+               <a href="#" class="add-to-bag">Add to bag</a>
+            </div>
+            <div class="product-card">
+               <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+               <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+               <p class="product-price">Rp3.550.000</p>
+               <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+               <a href="#" class="add-to-bag">Add to bag</a>
+            </div>
+            <div class="product-card">
+               <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+               <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+               <p class="product-price">Rp3.550.000</p>
+               <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+               <a href="#" class="add-to-bag">Add to bag</a>
+            </div>
+            <div class="product-card">
+               <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+               <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+               <p class="product-price">Rp3.550.000</p>
+               <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+               <a href="#" class="add-to-bag">Add to bag</a>
+            </div>
+            <div class="product-card">
+               <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+               <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+               <p class="product-price">Rp3.550.000</p>
+               <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+               <a href="#" class="add-to-bag">Add to bag</a>
+            </div>
+            <div class="product-card">
+               <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+               <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+               <p class="product-price">Rp3.550.000</p>
+               <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+               <a href="#" class="add-to-bag">Add to bag</a>
+            </div>
+            <div class="product-card">
+               <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+               <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+               <p class="product-price">Rp3.550.000</p>
+               <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+               <a href="#" class="add-to-bag">Add to bag</a>
+            </div>
+            <div class="product-card">
+               <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+               <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+               <p class="product-price">Rp3.550.000</p>
+               <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+               <a href="#" class="add-to-bag">Add to bag</a>
+            </div>
+            <div class="product-card">
+                <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+                <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+                <p class="product-price">Rp3.550.000</p>
+                <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+                <a href="#" class="add-to-bag">Add to bag</a>
+             </div>
+             <div class="product-card">
+                <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+                <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+                <p class="product-price">Rp3.550.000</p>
+                <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+                <a href="#" class="add-to-bag">Add to bag</a>
+             </div>
+             <div class="product-card">
+                <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+                <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+                <p class="product-price">Rp3.550.000</p>
+                <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+                <a href="#" class="add-to-bag">Add to bag</a>
+             </div>
+             <div class="product-card">
+                <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+                <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+                <p class="product-price">Rp3.550.000</p>
+                <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+                <a href="#" class="add-to-bag">Add to bag</a>
+             </div>
+             <div class="product-card">
+                <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+                <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+                <p class="product-price">Rp3.550.000</p>
+                <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+                <a href="#" class="add-to-bag">Add to bag</a>
+             </div>
+             <div class="product-card">
+                <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+                <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+                <p class="product-price">Rp3.550.000</p>
+                <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+                <a href="#" class="add-to-bag">Add to bag</a>
+             </div>
+             <div class="product-card">
+                <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+                <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+                <p class="product-price">Rp3.550.000</p>
+                <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+                <a href="#" class="add-to-bag">Add to bag</a>
+             </div>
+             <div class="product-card">
+                <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+                <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+                <p class="product-price">Rp3.550.000</p>
+                <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+                <a href="#" class="add-to-bag">Add to bag</a>
+             </div>
+             <div class="product-card">
+                <img src="AJ1_Retro_High_White_University_Blue.png" alt="Product Image">
+                <p class="product-title">NIKE AJ1 Retro High White University Blue Black...</p>
+                <p class="product-price">Rp3.550.000</p>
+                <span class="discounted-price">Rp1.000.000 <span class="discounted-percent">99%</span></span>
+                <a href="#" class="add-to-bag">Add to bag</a>
+             </div>
+            <button class="scroll-button" id="scroll-right">></button>
+         </div>
+         <div class="mobile-blocks">
+            <div class="mobile-block" style="background-color: #ff0;">1</div>
+            <div class="mobile-block" style="background-color: #0ff;">2</div>
+         </div>
+      </section>
+      <footer class="footer" style="background-color: #d9d9d9;">
+         <div id="footerContent" style="display: none;">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus, nisi ac aliquam consequat, tellus turpis fermentum eros, nec gravida arcu est vel mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Maecenas sed massa leo. Donec condimentum, ex vitae cursus aliquet, libero turpis lacinia metus, ut interdum purus ligula ut nisl.</p>
+         </div>
+         <br>
+         <p id="toggleFooterContent">Show All &nbsp;&nbsp;↓ <span class="arrow"></span></p>
+         <br>
+         <br>
+         &copy; 2022 PT Global Digital Niaga
+         <button id="scroll-top">↑</button>
+      </footer>
+      <script>
+         var productCards = document.querySelector('.product-cards');
+         var scrollLeftButton = document.getElementById('scroll-left');
+         var scrollRightButton = document.getElementById('scroll-right');
+         
+         // Function to check if there is still area to scroll
+         function checkScroll() {
+         var scrollLeft = productCards.scrollLeft;
+         var scrollWidth = productCards.scrollWidth;
+         var clientWidth = productCards.clientWidth;
+         
+         scrollLeftButton.style.display = scrollLeft > 0 ? 'block' : 'none';
+         scrollRightButton.style.display = scrollLeft < scrollWidth - clientWidth ? 'block' : 'none';
+         }
+         
+         // Event listeners for the buttons
+         scrollLeftButton.addEventListener('click', function() {
+         productCards.scrollLeft -= 30;
+         checkScroll();
+         });
+         
+         scrollRightButton.addEventListener('click', function() {
+         productCards.scrollLeft += 30;
+         checkScroll();
+         });
+         
+         // Initial check for button visibility
+         checkScroll();
+         
+         
+         var scrollTopButton = document.getElementById('scroll-top');
+         
+         // Function to check if the page is scrolled
+         function checkScrollTop() {
+         scrollTopButton.style.display = window.pageYOffset > 10 ? 'flex' : 'none';
+         }
+         
+         // Event listener for the button
+         scrollTopButton.addEventListener('click', function() {
+         window.scrollTo({ top: 0, behavior: 'smooth' });
+         });
+         
+         // Event listener for the scroll event
+         window.addEventListener('scroll', checkScrollTop);
+         
+         // Initial check for button visibility
+         checkScrollTop();
+         
+         document.getElementById('toggleFooterContent').addEventListener('click', function() {
+         var content = document.getElementById('footerContent');
+         var button = document.getElementById('toggleFooterContent');
+         if (content.style.display === "none") {
+          content.style.display = "block";
+          button.innerHTML = "Collapse All &nbsp;&nbsp;↑";
+         } else {
+          content.style.display = "none";
+          button.innerHTML = "Show All &nbsp;&nbsp;↓";
+         }
+         });
+         
+         
+      </script>
+   </body>
+</html>
